@@ -17,7 +17,7 @@ let tiempo = 0;
 let reloj = null;
 const sonidoAcierto = new Audio("sonidos/acierto.mp3");
 const sonidoFallo = new Audio("sonidos/fallo.mp3");
-
+const FALLOS_MAXIMOS = 10;
 
 function barajar(array) { // Algoritmo Fisher–Yates
   for (let i = array.length - 1; i > 0; i--) {
@@ -58,7 +58,6 @@ function generarNombre() {
     elementoPalabraElegida.classList.remove("animacionPalabraElegida");
     elementoPalabraElegida.offsetWidth;
     elementoPalabraElegida.classList.add("animacionPalabraElegida");
-
 }
 
 function comprobarDibujo(evt) {
@@ -81,6 +80,14 @@ function comprobarDibujo(evt) {
             seleccionado.classList.remove("mal");
             seleccionado.offsetWidth;
             seleccionado.classList.add("mal");
+            if(fallos == FALLOS_MAXIMOS) {
+                Swal.fire({
+                    title: "Has perdido",
+                    text: "Has cometido " + FALLOS_MAXIMOS + " fallos"}
+                ).then(() => {
+                    reiniciar();
+                });
+            }
         }
         generarNombre();
     }
@@ -143,7 +150,7 @@ function reiniciar() {
 
 Swal.fire({
   title: "Aprende inglés",
-  text: "Selecciona el dibujo que coincida con el nombre",
+  html: "<div>Selecciona el dibujo que coincida con el nombre</div><div>Dispones de un máximo de 10 fallos</div>",
   icon: "info"
 }).then(() => {
     inicializar();
