@@ -1,7 +1,7 @@
 const listaAnimalesOriginal = ["anteater","bulldog","butterfly","cat","chameleon","clown-fish","crocodile","duck","frog","giraffe","kangaroo","lion","monkey","octopus","ostrich","pig","rabbit","racoon","ray","shark","sheep","spider","squirrel","swan","tiger","toucan","turtle"];
-let listaAnimales;
+let listaActual;
 
-let animalElegido;
+let palabraElegida;
 let aciertos = 0;
 let fallos = 0;
 let tiempo = 0;
@@ -19,18 +19,18 @@ function barajar(array) { // Algoritmo Fisher–Yates
 }
 
 function inicializar() {
-    document.getElementById("animales").addEventListener("click", comprobarAnimal );
+    document.getElementById("imagenes").addEventListener("click", comprobarDibujo );
     // uso [... para crea un array nuevo]
-    listaAnimales = barajar([...listaAnimalesOriginal]);
-    const main = document.getElementById("animales");
+    listaActual = barajar([...listaAnimalesOriginal]);
+    const main = document.getElementById("imagenes");
     main.textContent = "";
-    for(const animal of listaAnimales) {
+    for(const dibujo of listaActual) {
         const div = document.createElement("div");
         main.appendChild(div);
-        div.classList.add("rounded-3", "animal", "border", "border-1", "shadow");
-        div.style.backgroundImage = `url(imagenes/${animal}.svg)`;
+        div.classList.add("rounded-3", "dibujo", "border", "border-1", "shadow");
+        div.style.backgroundImage = `url(imagenes/animales/${dibujo}.svg)`;
         div.style.backgroundSize = "contain";
-        div.dataset.nombre = animal;
+        div.dataset.nombre = dibujo;
     }
     generarNombre();
     aciertos = 0;
@@ -48,22 +48,22 @@ function inicializar() {
 }
 
 function generarNombre() {
-    animalElegido = listaAnimales[Math.floor(Math.random() * listaAnimales.length)];
-    const elementoAnimalElegido = document.getElementById("animalElegido")
-    elementoAnimalElegido.textContent = animalElegido; 
-    elementoAnimalElegido.classList.remove("animacionAnimalElegido");
-    elementoAnimalElegido.offsetWidth;
-    elementoAnimalElegido.classList.add("animacionAnimalElegido");
+    palabraElegida = listaActual[Math.floor(Math.random() * listaActual.length)];
+    const elementoPalabraElegida = document.getElementById("palabraElegida")
+    elementoPalabraElegida.textContent = palabraElegida; 
+    elementoPalabraElegida.classList.remove("animacionPalabraElegida");
+    elementoPalabraElegida.offsetWidth;
+    elementoPalabraElegida.classList.add("animacionPalabraElegida");
 
 }
 
-function comprobarAnimal(evt) {
+function comprobarDibujo(evt) {
     const seleccionado = evt.target;
     if(seleccionado.dataset.nombre != undefined && seleccionado.classList.contains("bien") == false) {
-        if(seleccionado.dataset.nombre === animalElegido) {
+        if(seleccionado.dataset.nombre === palabraElegida) {
             seleccionado.classList.add("bien");
             seleccionado.classList.remove("mal");
-            listaAnimales.splice(listaAnimales.findIndex(a => a === animalElegido), 1);
+            listaActual.splice(listaActual.findIndex(a => a === palabraElegida), 1);
             aciertos++;
             sonidoAcierto.currentTime = 0;
             sonidoAcierto.play();
@@ -83,8 +83,8 @@ function comprobarAnimal(evt) {
 }
 
 function comprobarVictoria() {
-    if(listaAnimales.length == 0) {
-        document.getElementById("animales").removeEventListener("click", comprobarAnimal );
+    if(listaActual.length == 0) {
+        document.getElementById("imagenes").removeEventListener("click", comprobarDibujo );
         // Usar html en lugar de text
         Swal.fire({
         title: "Has ganado",
